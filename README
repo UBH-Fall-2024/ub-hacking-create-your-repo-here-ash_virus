@@ -1,13 +1,12 @@
-PROJECT : MALWARE DETECTOR
-DATE    : 09 NOV
-TEAM    : ash_virus
+PROJECT: MALWARE DETECTOR
+DATE: 09 NOV
+TEAM: ash_virus
 
-In order to compile the project and host the website , we used flask to locally host it . The file index.html is the frontend
-of the website which basically is responsible for the UI/UX and the upload file option . It accepts a file from the user and 
-succesfully sends it to the backend and stores it temporarily in a directory called uploads .
+To compile the project and host the website, we used Flask to locally host it. The file index.html is the frontend
+of the website which is responsible for the UI/UX and the upload file option. It accepts a file from the user and 
+successfully sends it to the backend and stores it temporarily in a directory called uploads.
 
-The file app.py is a code written in python which handles the backend and imports flask to host the website, and also uses the 
-venv package to create a virtual environment. The backend file first hosts the website with the command "python app.py" and the accepts
-a file from the user and stores it in 'uploads' and then invokes an api called VirusTotal and gets a review of the uploaded file and then 
+The file app.py is a code written in Python that handles the backend imports flask to host the website and uses the 
+venv package to create a virtual environment. The backend file first hosts the website with the command "python app.py" and then accepts
+a file from the user and stores it in 'uploads' and then invokes an API called VirusTotal gets a review of the uploaded file and then 
 prints the response with flash messages on the website with the entire process taking less than 2-3 seconds 
-
