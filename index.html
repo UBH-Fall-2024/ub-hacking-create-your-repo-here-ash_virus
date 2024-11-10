@@ -20,17 +20,30 @@
             justify-content: center;
             align-items: center;
             padding: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
         }
 
         .container {
             width: 100%;
             max-width: 600px;
-            background-color: #111;
+            background-color: rgba(17, 17, 17, 0.9);
             border: 1px solid #00ff00;
             border-radius: 8px;
             padding: 2rem;
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
             animation: glow 2s infinite alternate;
+            position: relative;
+            z-index: 1;
         }
 
         @keyframes glow {
@@ -137,7 +150,7 @@
             margin-top: 1rem;
             padding: 1rem;
             border-radius: 4px;
-            background-color: #222;
+            background-color: rgba(34, 34, 34, 0.8);
             border-left: 4px solid #00ff00;
         }
 
@@ -170,7 +183,7 @@
         .message-list li {
             margin-bottom: 0.5rem;
             padding: 0.5rem;
-            background-color: #1a1a1a;
+            background-color: rgba(26, 26, 26, 0.8);
             border-radius: 4px;
         }
 
@@ -184,6 +197,7 @@
     </style>
 </head>
 <body>
+    <canvas id="matrix-bg"></canvas>
     <div class="container">
         <div class="header">
             <div class="skull">☠️</div>
@@ -222,19 +236,20 @@
     <script>
         function updateDateTime() {
             const now = new Date();
-            const date = now.toLocaleDateString('en-US', { 
+            const options = { 
+                timeZone: 'America/New_York',
                 day: '2-digit',
-                month: 'short'
-            });
-            const time = now.toLocaleTimeString('en-US', { 
+                month: 'short',
                 hour: '2-digit',
                 minute: '2-digit',
                 second: '2-digit',
-                hour12: false 
-            });
+                hour12: false
+            };
+            const formatter = new Intl.DateTimeFormat('en-US', options);
+            const [{ value: month }, , { value: day }, , { value: hour }, , { value: minute }, , { value: second }] = formatter.formatToParts(now);
             
-            document.querySelector('.date').textContent = date;
-            document.querySelector('.clock').textContent = time;
+            document.querySelector('.date').textContent = `${day} ${month}`;
+            document.querySelector('.clock').textContent = `${hour}:${minute}:${second}`;
         }
 
         setInterval(updateDateTime, 1000);
@@ -251,6 +266,48 @@
             }
 
             messagesDiv.innerHTML = '<ul class="message-list"><li><span class="loading"></span> Analyzing file...</li></ul>';
+        });
+
+        // Matrix rain effect
+        const canvas = document.getElementById('matrix-bg');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&*()_+-=[]{}|;:,.<>?';
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+
+        const drops = [];
+        for (let i = 0; i < columns; i++) {
+            drops[i] = 1;
+        }
+
+        function draw() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.fillStyle = '#0f0';
+            ctx.font = fontSize + 'px monospace';
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+
+                drops[i]++;
+            }
+        }
+
+        setInterval(draw, 33);
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
     </script>
 </body>
