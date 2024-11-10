@@ -11,4 +11,4 @@ venv package to create a virtual environment. The backend file first hosts the w
 a file from the user and stores it in 'uploads' and then invokes an API called VirusTotal gets a review of the uploaded file and then 
 prints the response with flash messages on the website with the entire process taking less than 2-3 seconds 
 
-We also created sample test files comprising of data that can be flagged as potential malware which is included in this repo called viruu.dat.txt
+We also created sample test files comprising of data that can be flagged as potential malware which is included in this repo called sample
